@@ -1,0 +1,12 @@
+src/
+├── config/         # Configuration files (environment variables, Prisma setup)
+├── controllers/    # Logic for handling API requests
+├── middleware/     # Reusable middleware for authentication, logging, etc.
+├── models/         # Database models (Prisma schema and custom domain logic)
+├── routes/         # API route definitions
+├── services/       # Business logic and service layer
+├── utils/          # Helper utilities
+├── app.js          # Express application setup
+└── server.js       # Entry point
+prisma/
+├── schema.prisma   # Prisma schema file
