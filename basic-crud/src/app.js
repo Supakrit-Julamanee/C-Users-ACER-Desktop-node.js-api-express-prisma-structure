@@ -1,34 +1,28 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const itemRoutes = require('./routes/itemRoute'); // Import your item routes
-const errorHandler = require('./middleware/errorHandler'); // Custom error handling middleware
+const errorHandler = require('./middleware/errorHandler');
+const authenticateToken = require('./middleware/authenticateToken');
+const authorizeRole = require('./middleware/authorizeRole');
 
-// Initialize the Express app
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('../swagger-output.json');
+const itemRoute = require('./routes/itemRoute');
+const userRoutes = require('./routes/authRoute');
 const app = express();
 
-// Middleware for parsing JSON requests
 app.use(express.json());
-
-// Middleware for enabling Cross-Origin Resource Sharing (CORS)
 app.use(cors());
-
-// Middleware for logging HTTP requests (e.g., for development)
 app.use(morgan('dev'));
 
-// Mount API routes
-app.use('/items', itemRoutes);
+// Swagger
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Catch-all route for undefined routes
-app.use((req, res, next) => {
-  res.status(404).json({
-    status: 'fail',
-    code: 404,
-    message: 'Route not found',
-  });
-});
+// Routes
+app.use('/items', authenticateToken, authorizeRole('A'), itemRoute);
+app.use('/auth', userRoutes);
 
-// Error-handling middleware (always comes last)
+// Error handler
 app.use(errorHandler);
 
 module.exports = app;

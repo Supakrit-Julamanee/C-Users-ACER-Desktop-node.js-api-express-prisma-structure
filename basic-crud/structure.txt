@@ -1,3 +1,5 @@
+*express.js + prisma backend structure
+
 src/
 ├── config/         # Configuration files (environment variables, Prisma setup)
 ├── controllers/    # Logic for handling API requests
